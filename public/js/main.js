@@ -4,9 +4,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelector('.nav-links');
 
     if (mobileMenuToggle) {
+        const menuIcon = mobileMenuToggle.querySelector('.material-symbols-rounded');
+
         mobileMenuToggle.addEventListener('click', function() {
-            navLinks.classList.toggle('active');
+            const isActive = navLinks.classList.toggle('active');
             this.classList.toggle('active');
+            if (menuIcon) menuIcon.textContent = isActive ? 'close' : 'menu';
         });
     }
 
@@ -16,6 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', function() {
             navLinks.classList.remove('active');
             mobileMenuToggle.classList.remove('active');
+            const menuIcon = mobileMenuToggle.querySelector('.material-symbols-rounded');
+            if (menuIcon) menuIcon.textContent = 'menu';
         });
     });
 });
