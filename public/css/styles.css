@@ -1,3 +1,27 @@
+/* Material Symbols Rounded Font */
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block');
+
+.material-symbols-rounded {
+    font-family: 'Material Symbols Rounded';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    direction: ltr;
+    vertical-align: middle;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: 'liga';
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    width: 1em;
+    height: 1em;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
 /* Modern CSS Reset */
 *, *::before, *::after {
     box-sizing: border-box;
@@ -168,8 +192,159 @@ body {
     flex-shrink: 0;
 }
 
+/* Language Dropdown (navbar + footer) */
+.lang-dropdown {
+    position: relative;
+    display: inline-flex;
+}
+
+.lang-trigger-compact.open {
+    background: rgba(30, 90, 168, 0.12);
+    color: var(--primary-blue);
+}
+
+.lang-trigger-compact .material-symbols-rounded {
+    font-size: 20px;
+}
+
+.lang-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: var(--radius-lg);
+    border: none;
+    background: var(--gray-100);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: background var(--transition-base), color var(--transition-base);
+    white-space: nowrap;
+    width: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.lang-trigger:hover {
+    background: var(--gray-200);
+}
+
+.lang-trigger.open {
+    background: rgba(30, 90, 168, 0.12);
+    color: var(--primary-blue);
+}
+
+.lang-trigger .material-symbols-rounded {
+    font-size: 18px;
+}
+
+.lang-trigger .arrow {
+    font-size: 18px;
+    margin-left: auto;
+    transition: transform var(--transition-base);
+}
+
+.lang-trigger.open .arrow {
+    transform: rotate(180deg);
+}
+
+.lang-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: 180px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    z-index: 2000;
+    display: none;
+    padding: 0;
+    overflow: hidden;
+    animation: langMenuOpen 0.18s ease;
+}
+
+.lang-menu.open {
+    display: block;
+}
+
+.lang-menu-scroll {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 4px 0;
+}
+
+.lang-menu-scroll::-webkit-scrollbar {
+    width: 4px;
+}
+
+.lang-menu-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.lang-menu-scroll::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
+.lang-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: none;
+    white-space: nowrap;
+    transition: background var(--transition-base);
+}
+
+.lang-menu-item:hover {
+    background: var(--gray-100);
+}
+
+.lang-menu-item.selected {
+    background: rgba(30, 90, 168, 0.08);
+    color: var(--primary-blue);
+    font-weight: 600;
+}
+
+.lang-menu-item .check-mark {
+    font-size: 16px;
+    opacity: 0;
+    width: 16px;
+    flex-shrink: 0;
+}
+
+.lang-menu-item.selected .check-mark {
+    opacity: 1;
+}
+
+.lang-menu-item .lang-name {
+    flex: 1;
+}
+
+@keyframes langMenuOpen {
+    from {
+        opacity: 0;
+        transform: scaleY(0.9);
+        transform-origin: top;
+    }
+    to {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+}
+
 /* Theme and Hamburger Buttons */
 .theme-toggle,
+.lang-trigger-compact,
 .mobile-menu-toggle {
     position: relative;
     display: flex;
@@ -179,24 +354,29 @@ body {
     height: 40px;
     border-radius: var(--radius-lg);
     background: var(--gray-100);
+    color: var(--text-primary);
     border: none;
     cursor: pointer;
-    transition: background var(--transition-base), transform var(--transition-base);
+    transition: background var(--transition-base), color var(--transition-base), transform var(--transition-base);
     -webkit-tap-highlight-color: transparent;
 }
 
 .theme-toggle:hover,
+.lang-trigger-compact:hover,
 .mobile-menu-toggle:hover {
     background: var(--gray-200);
     transform: scale(1.05);
 }
 
 .theme-toggle:active,
+.lang-trigger-compact:active,
 .mobile-menu-toggle:active {
     transform: scale(0.95);
 }
 
-.theme-toggle svg {
+.theme-toggle svg,
+.lang-trigger-compact
+.material-symbols-rounded {
     width: 20px;
     height: 20px;
     color: var(--text-primary);
@@ -1566,7 +1746,6 @@ body {
     background: var(--gray-900);
     color: var(--gray-400);
     position: relative;
-    overflow: hidden;
 }
 
 .footer::before {
@@ -1578,6 +1757,7 @@ body {
     height: 1px;
     background: var(--gradient-primary);
     opacity: 0.5;
+    pointer-events: none;
 }
 
 .footer-inner {
@@ -1711,42 +1891,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-sm);
-}
-
-.language-selector {
-    appearance: none;
-    background-color: var(--gray-800);
-    color: var(--gray-300);
-    border: 1px solid var(--gray-700);
-    border-radius: var(--radius-md);
-    padding: var(--spacing-sm) var(--spacing-lg);
-    padding-right: var(--spacing-2xl);
-    font-size: 0.9375rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all var(--transition-base);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right var(--spacing-sm) center;
-    background-size: 16px;
-}
-
-.language-selector:hover {
-    background-color: var(--gray-700);
-    border-color: var(--gray-600);
-    color: white;
-}
-
-.language-selector:focus {
-    outline: none;
-    border-color: var(--primary-blue);
-    box-shadow: 0 0 0 3px rgba(30, 90, 168, 0.1);
-}
-
-.language-selector option {
-    background-color: var(--gray-800);
-    color: var(--gray-300);
-    padding: var(--spacing-sm);
 }
 
 /* Scroll to Top Button */
@@ -1926,10 +2070,6 @@ body {
 
     .mobile-menu-toggle {
         order: 2;
-    }
-
-    .language-selector {
-        width: 100%;
     }
 
     .changelog {
