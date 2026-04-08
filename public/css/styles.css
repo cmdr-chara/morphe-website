@@ -1085,13 +1085,15 @@ body {
     font-weight: 600;
 }
 
-.faq-toggle-icon {
+.faq-toggle-icon,
+.faq-question .material-symbols-rounded {
     flex-shrink: 0;
     transition: transform var(--transition-base);
     color: var(--text-tertiary);
 }
 
-.faq-item.active .faq-toggle-icon {
+.faq-item.active .faq-toggle-icon,
+.faq-item.active .faq-question .material-symbols-rounded {
     transform: rotate(180deg);
 }
 
