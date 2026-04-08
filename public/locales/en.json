@@ -274,7 +274,6 @@
   "changelog": {
     "title": "What's New",
     "subtitle": "Complete history of updates and improvements",
-    "filter-type": "Type:",
     "filter-all": "All",
     "filter-manager": "Manager",
     "filter-patches": "Patches",

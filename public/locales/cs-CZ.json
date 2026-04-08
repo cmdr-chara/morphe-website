@@ -219,7 +219,6 @@
   "changelog": {
     "title": "Novinky",
     "subtitle": "Kompletní historie aktualizací a vylepšení",
-    "filter-type": "Typ:",
     "filter-all": "Vše",
     "filter-manager": "Manager",
     "filter-patches": "Záplaty",

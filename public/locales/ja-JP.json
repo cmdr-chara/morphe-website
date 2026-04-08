@@ -219,7 +219,6 @@
   "changelog": {
     "title": "新着情報",
     "subtitle": "更新および改善の完全な履歴",
-    "filter-type": "タイプ:",
     "filter-all": "すべて",
     "filter-manager": "Manager",
     "filter-patches": "パッチ",

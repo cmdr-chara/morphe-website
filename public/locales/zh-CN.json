@@ -219,7 +219,6 @@
   "changelog": {
     "title": "更新内容",
     "subtitle": "完整的更新与改进历史",
-    "filter-type": "类型：",
     "filter-all": "全部",
     "filter-manager": "Manager",
     "filter-patches": "补丁",

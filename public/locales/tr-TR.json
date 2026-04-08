@@ -219,7 +219,6 @@
   "changelog": {
     "title": "Yenilikler",
     "subtitle": "Güncellemelerin ve iyileştirmelerin tam geçmişi",
-    "filter-type": "Tür:",
     "filter-all": "Tümü",
     "filter-manager": "Manager",
     "filter-patches": "Yamalar",

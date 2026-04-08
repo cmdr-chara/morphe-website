@@ -274,7 +274,6 @@
   "changelog": {
     "title": "새 소식",
     "subtitle": "업데이트와 개선 사항을 한눈에 확인하세요",
-    "filter-type": "유형:",
     "filter-all": "전체",
     "filter-manager": "매니저",
     "filter-patches": "패치",

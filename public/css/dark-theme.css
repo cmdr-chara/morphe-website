@@ -133,10 +133,6 @@
 }
 
 /* Changelogs */
-[data-theme="dark"] .changelog-filters {
-    background: var(--bg-card);
-}
-
 [data-theme="dark"] .toggle-slider {
     background: var(--gray-600);
 }

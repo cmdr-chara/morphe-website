@@ -274,7 +274,6 @@
   "changelog": {
     "title": "Có gì mới",
     "subtitle": "Lịch sử cập nhật và cải tiến đầy đủ",
-    "filter-type": "Loại:",
     "filter-all": "Tất cả",
     "filter-manager": "Trình quản lý",
     "filter-patches": "Bản vá",

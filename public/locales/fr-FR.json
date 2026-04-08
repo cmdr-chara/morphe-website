@@ -219,7 +219,6 @@
   "changelog": {
     "title": "Nouveautés",
     "subtitle": "Historique complet des mises à jour et améliorations",
-    "filter-type": "Type :",
     "filter-all": "Tous",
     "filter-manager": "Manager",
     "filter-patches": "Correctifs",
