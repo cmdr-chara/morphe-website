@@ -748,8 +748,7 @@ body {
     .feature-slide:hover,
     .testimonial-card:hover,
     .version-card:hover {
-        transform: translateY(-10px) scale(1.02);
-        box-shadow: var(--shadow-lg);
+        box-shadow: var(--shadow-md);
     }
 }
 
@@ -1273,7 +1272,7 @@ body {
     border: 1px solid var(--border);
     border-radius: var(--radius-xl);
     padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-lg);
-    transition: box-shadow 0.3s ease;
+    transition: box-shadow 0.2s ease;
     display: flex;
     flex-direction: column;
     gap: var(--spacing-md);
@@ -1567,8 +1566,7 @@ body {
 @media (hover: hover) and (pointer: fine) {
     .crypto-card:hover {
         border-color: var(--primary-blue);
-        box-shadow: var(--shadow-lg);
-        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
     }
 }
 
