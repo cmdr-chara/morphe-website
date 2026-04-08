@@ -137,14 +137,6 @@
     background: var(--bg-card);
 }
 
-[data-theme="dark"] .filter-buttons {
-    background: var(--gray-200);
-}
-
-[data-theme="dark"] .filter-btn.active {
-    background: var(--gray-100);
-}
-
 [data-theme="dark"] .toggle-slider {
     background: var(--gray-600);
 }
@@ -174,6 +166,26 @@
 [data-theme="dark"] .show-more-section {
     background: var(--bg-card);
     border-color: var(--border);
+}
+
+[data-theme="dark"] .type-badge.manager {
+    background: rgba(74, 127, 200, 0.15);
+    color: var(--primary-blue);
+    outline-color: rgba(74, 127, 200, 0.3);
+}
+
+[data-theme="dark"] .type-badge.patches {
+    background: rgba(32, 207, 206, 0.12);
+    color: var(--primary-teal);
+    outline-color: rgba(32, 207, 206, 0.25);
+}
+
+[data-theme="dark"] .filter-btn {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .filter-btn.active {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
 /* App Features Showcase */

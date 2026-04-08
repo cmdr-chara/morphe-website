@@ -19,9 +19,9 @@ const MAX_MANAGER_RELEASES = 10;
 const MAX_PATCHES_RELEASES = 10;
 
 const categoryConfig = {
-    'features': { icon: '✨', class: 'icon-added' },
-    'bug fixes': { icon: '🐛', class: 'icon-fixed' },
-    'perf': { icon: '⚡', class: 'icon-perf' }
+    'features': { icon: 'auto_awesome', class: 'icon-added' },
+    'bug fixes': { icon: 'bug_report', class: 'icon-fixed' },
+    'perf': { icon: 'speed', class: 'icon-perf' }
 };
 
 function fetchUrl(url) {
@@ -222,13 +222,13 @@ function generateVersionCard(version, repoUrl) {
     for (const [category, changes] of Object.entries(version.categories)) {
         if (!changes || changes.length === 0) continue;
 
-        const config = categoryConfig[category] || { icon: '📝', class: 'icon-changed' };
+        const config = categoryConfig[category] || { icon: 'notes', class: 'icon-changed' };
         const categoryTitle = category.charAt(0).toUpperCase() + category.slice(1);
 
         html += `
         <div class="change-group">
             <div class="change-category">
-                <span class="category-icon ${config.class}">${config.icon}</span>
+                <span class="material-symbols-rounded category-icon ${config.class}">${config.icon}</span>
                 <span>${escapeHtml(categoryTitle)}</span>
             </div>
             <ul class="change-list">`;
