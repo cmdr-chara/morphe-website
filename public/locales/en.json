@@ -62,7 +62,7 @@
   "hero": {
     "title": "Transform Your",
     "title-highlight": "Android Apps",
-    "description": "From the developers that brought you the greatest modded YouTube apps,\n                comes Morphe - the powerful app modification tool that puts you in control",
+    "description": "From the developers that brought you the greatest modded YouTube apps, comes Morphe - the powerful app modification tool that puts you in control",
     "download": "Download Morphe",
     "learn-more": "Learn More",
     "social-label": "Join the Community"
@@ -264,12 +264,31 @@
   "donate": {
     "title": "Support",
     "description": "Your contribution helps us continue developing and improving Morphe",
-    "why-title": "Why Donate?",
     "why-1": "Keep Morphe free and open source",
     "why-2": "Support ongoing development",
     "why-3": "Help cover infrastructure costs",
     "why-4": "Enable faster bug fixes and features",
-    "crypto-click": "Click to open wallet"
+    "oc-title": "Support us on Open Collective",
+    "oc-desc": "100% transparent — see exactly how every dollar is raised and spent. One-time or recurring, any amount helps.",
+    "oc-btn": "Donate now",
+    "tiers-title": "Choose your support level",
+    "tiers-desc": "Every contribution makes a difference",
+    "tier1-name": "One-time",
+    "tier1-amount": "Any amount",
+    "tier1-desc": "Buy us a coffee. A single contribution to show your appreciation — no commitment required.",
+    "tier2-name": "Backer",
+    "tier2-desc": "Become a recurring supporter and help us plan for the long term. Your name appears on our backers list.",
+    "tier3-name": "Mega Supporter",
+    "tier3-desc": "Get your logo or name prominently featured in the Mega Supporters section on the Morphe website.",
+    "tier-contribute": "Contribute",
+    "tier-popular": "Popular",
+    "backers-title": "Our backers",
+    "backers-all": "See all",
+    "backers-loading": "Loading…",
+    "backers-empty": "Be the first to support Morphe!",
+    "sponsors-title": "Mega Supporters",
+    "sponsors-cta": "Become a mega supporter",
+    "sponsors-empty": "Be the first mega supporter!"
   },
   "changelog": {
     "title": "What's New",

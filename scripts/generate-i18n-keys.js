@@ -54,7 +54,7 @@ function extractKeys() {
       // Get the text content between tags as default value
       const tagRegex = new RegExp(`data-i18n="${key}"[^>]*>([^<]+)<`, 'g');
       const tagMatch = tagRegex.exec(content);
-      const defaultValue = tagMatch ? tagMatch[1].trim() : key;
+      const defaultValue = tagMatch ? tagMatch[1].trim().replace(/\s+/g, ' ') : key;
 
       if (!keys.has(key)) {
         keys.set(key, defaultValue);
@@ -69,7 +69,7 @@ function extractKeys() {
       // Uses a greedy match up to the last </tag> on the same element
       const tagRegex = new RegExp(`<(\\w+)[^>]*data-i18n-html="${key}"[^>]*>([\\s\\S]*?)<\\/\\1>`, 'g');
       const tagMatch = tagRegex.exec(content);
-      const defaultValue = tagMatch ? tagMatch[2].trim() : key;
+      const defaultValue = tagMatch ? tagMatch[2].trim().replace(/\s+/g, ' ') : key;
 
       if (!keys.has(key)) {
         keys.set(key, defaultValue);
@@ -82,7 +82,7 @@ function extractKeys() {
       const key = match[1];
       const placeholderRegex = new RegExp(`data-i18n-placeholder="${key}"[^>]*placeholder="([^"]+)"`, 'g');
       const placeholderMatch = placeholderRegex.exec(content);
-      const defaultValue = placeholderMatch ? placeholderMatch[1].trim() : key;
+      const defaultValue = placeholderMatch ? placeholderMatch[1].trim().replace(/\s+/g, ' ') : key;
 
       if (!keys.has(key)) {
         keys.set(key, defaultValue);
@@ -95,7 +95,7 @@ function extractKeys() {
       const key = match[1];
       const ariaRegex = new RegExp(`data-i18n-aria="${key}"[^>]*aria-label="([^"]+)"`, 'g');
       const ariaMatch = ariaRegex.exec(content);
-      const defaultValue = ariaMatch ? ariaMatch[1].trim() : key;
+      const defaultValue = ariaMatch ? ariaMatch[1].trim().replace(/\s+/g, ' ') : key;
 
       if (!keys.has(key)) {
         keys.set(key, defaultValue);
@@ -108,7 +108,7 @@ function extractKeys() {
       const key = match[1];
       const titleRegex = new RegExp(`data-i18n-title="${key}"[^>]*title="([^"]+)"`, 'g');
       const titleMatch = titleRegex.exec(content);
-      const defaultValue = titleMatch ? titleMatch[1].trim() : key;
+      const defaultValue = titleMatch ? titleMatch[1].trim().replace(/\s+/g, ' ') : key;
 
       if (!keys.has(key)) {
         keys.set(key, defaultValue);

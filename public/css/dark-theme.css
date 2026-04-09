@@ -74,13 +74,33 @@
     background: var(--bg-card);
 }
 
-[data-theme="dark"] .crypto-card {
+[data-theme="dark"] .donate-tier,
+[data-theme="dark"] .donate-backers {
     background: var(--bg-card);
 }
 
+[data-theme="dark"] .donate-sponsors-card {
+    border-color: #d97706;
+}
+
+[data-theme="dark"] .donate-sponsor-avatar {
+    border-color: #d97706;
+    background: rgba(217, 119, 6, 0.12);
+}
+
+[data-theme="dark"] .donate-avatar-more {
+    background: var(--gray-200);
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .btn-donate {
+    background: rgba(255,255,255,0.95);
+    color: var(--primary-blue);
+}
+
 @media (hover: hover) and (pointer: fine) {
-    [data-theme="dark"] .crypto-card:hover {
-        border-color: var(--primary-blue);
+    [data-theme="dark"] .donate-tier:hover {
+        border-color: var(--tier-accent, var(--primary-blue));
     }
 }
 
@@ -256,7 +276,8 @@ body,
 /* Cards keep transform/box-shadow for hover animations */
 .feature-card,
 .testimonial-card,
-.crypto-card,
+.donate-tier,
+.donate-backers,
 .social-link,
 .carousel-button {
     transition: background-color var(--transition-base),
