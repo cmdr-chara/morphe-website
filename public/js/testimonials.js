@@ -4,12 +4,11 @@
 (function() {
     'use strict';
 
-    let carouselInstance = null; // Store carousel instance globally
+    let carouselInstance = null;
 
     // Testimonial card template
     function createTestimonialCard(testimonial) {
         const avatar = testimonial.author ? testimonial.author.charAt(0).toUpperCase() : '?';
-
         return `
             <div class="testimonial-card">
                 <div class="testimonial-content">
@@ -53,15 +52,15 @@
         // Reorder testimony by declared indexes
         // Allows easily changing order without localized files
         return reorderByIndexes(
-            [2, 9, 3, 16, 4, 18, 5, 10, 6, 11, 7, 13, 12, 15, 17, 14, 19, 8].map( n => n - 1),
+            [2, 9, 3, 16, 4, 18, 5, 10, 6, 11, 7, 13, 12, 15, 17, 14, 19, 8].map(n => n - 1),
             testimonials
         );
     }
 
     function reorderByIndexes(indexes, values) {
-      return indexes
-        .filter(i => i >= 0 && i < values.length)
-        .map(i => values[i]);
+        return indexes
+            .filter(i => i >= 0 && i < values.length)
+            .map(i => values[i]);
     }
 
     // Render testimonials into DOM
@@ -79,32 +78,25 @@
 
     // Destroy existing carousel instance
     function destroyCarousel() {
-        if (carouselInstance) {
-            // Remove event listeners
-            const { grid, prevBtn, nextBtn, mouseUpHandler } = carouselInstance;
+        if (!carouselInstance) return;
 
-            if (grid) {
-                grid.removeEventListener('touchstart', carouselInstance.touchStart);
-                grid.removeEventListener('touchend', carouselInstance.touchEnd);
-                grid.removeEventListener('mousedown', carouselInstance.mouseDown);
-            }
+        const { track, prevBtn, nextBtn, scrollHandler, resizeHandler, mouseUpHandler, mouseDown, touchStart, touchEnd, nextClick, prevClick } = carouselInstance;
 
-            if (prevBtn) {
-                prevBtn.removeEventListener('click', carouselInstance.prevClick);
-            }
-
-            if (nextBtn) {
-                nextBtn.removeEventListener('click', carouselInstance.nextClick);
-            }
-
-            if (mouseUpHandler) {
-                document.removeEventListener('mouseup', mouseUpHandler);
-            }
-
-            window.removeEventListener('resize', carouselInstance.resizeHandler);
-
-            carouselInstance = null;
+        if (track) {
+            if (scrollHandler) track.removeEventListener('scroll', scrollHandler);
+            if (mouseDown)     track.removeEventListener('mousedown', mouseDown);
+            if (touchStart)    track.removeEventListener('touchstart', touchStart);
+            if (touchEnd)      track.removeEventListener('touchend', touchEnd);
+            track.querySelectorAll('.testimonial-card-clone').forEach(el => el.remove());
+            track.style.cssText = '';
         }
+
+        if (prevBtn && prevClick) prevBtn.removeEventListener('click', prevClick);
+        if (nextBtn && nextClick) nextBtn.removeEventListener('click', nextClick);
+        if (mouseUpHandler) document.removeEventListener('mouseup', mouseUpHandler);
+        if (resizeHandler)  window.removeEventListener('resize', resizeHandler);
+
+        carouselInstance = null;
     }
 
     // Initialize carousel
@@ -115,177 +107,215 @@
         const carousel = document.querySelector('.testimonials-carousel');
         if (!carousel) return;
 
-        const grid = carousel.querySelector('.testimonials-grid');
+        const track = carousel.querySelector('.testimonials-grid');
         const prevBtn = carousel.querySelector('.carousel-button.prev');
         const nextBtn = carousel.querySelector('.carousel-button.next');
-        const cards = grid.querySelectorAll('.testimonial-card');
+        if (!track || !prevBtn || !nextBtn) return;
 
-        if (cards.length === 0) return;
+        track.querySelectorAll('.testimonial-card-clone').forEach(el => el.remove());
 
-        let currentIndex = 0;
+        const originalCards = Array.from(track.querySelectorAll('.testimonial-card'));
+        if (originalCards.length === 0) return;
+
         const isMobile = window.innerWidth <= 768;
-        const cardsToShow = isMobile ? 1 : 3;
-        const maxIndex = Math.max(0, cards.length - cardsToShow);
+        const isRTL = document.documentElement.dir === 'rtl';
+        const total = originalCards.length;
 
-        // Touch/swipe tracking
-        let touchStartX = 0;
+        // Clone all cards on both sides for infinite buffer.
+        // clonesBefore: must mirror the END of the real list so scrolling back
+        // from card[0] immediately shows card[total-1], card[total-2], etc.
+        // We insert them one-by-one at the front, so the last one inserted
+        // ends up first — that means we iterate forward and prepend.
+        const clonesAfter = originalCards.map(c => {
+            const cl = c.cloneNode(true);
+            cl.classList.add('testimonial-card-clone');
+            return cl;
+        });
+
+        // Prepend in reverse so DOM order is [..., card[total-2], card[total-1]] before real cards
+        for (let i = originalCards.length - 1; i >= 0; i--) {
+            const cl = originalCards[i].cloneNode(true);
+            cl.classList.add('testimonial-card-clone');
+            track.insertBefore(cl, track.firstChild);
+        }
+
+        clonesAfter.forEach(c => track.appendChild(c));
+
+        // Style track as scroll container.
+        // overflow-y cannot be visible when overflow-x is scroll (browser resets it to auto).
+        // Instead we add vertical padding so the box-shadow on hover fits within the scroll area.
+        track.style.overflowX = 'scroll';
+        track.style.paddingTop = '8px';
+        track.style.paddingBottom = '16px';
+        track.style.scrollSnapType = 'x mandatory';
+        track.style.scrollBehavior = 'auto';
+        track.style.msOverflowStyle = 'none';
+        track.style.scrollbarWidth = 'none';
+        track.style.cursor = 'grab';
+        track.style.webkitOverflowScrolling = 'touch';
+
+        // Each card snaps to start
+        const allCards = Array.from(track.querySelectorAll('.testimonial-card, .testimonial-card-clone'));
+        allCards.forEach(card => {
+            card.style.scrollSnapAlign = 'start';
+            card.style.flexShrink = '0';
+        });
+
+        // currentIndex: real cards occupy positions [total .. total*2-1]
+        let currentIndex = total;
+        let isStepping = false;
+
+        function getScrollLeft(index) {
+            const card = allCards[index];
+            if (!card) return 0;
+            return card.offsetLeft - track.offsetLeft;
+        }
+
+        function scrollToIndex(index, smooth) {
+            track.style.scrollBehavior = smooth ? 'smooth' : 'auto';
+            track.scrollLeft = getScrollLeft(index);
+        }
+
+        function teleportIfNeeded() {
+            if (currentIndex < total) {
+                currentIndex = currentIndex + total;
+                scrollToIndex(currentIndex, false);
+            } else if (currentIndex >= total * 2) {
+                currentIndex = currentIndex - total;
+                scrollToIndex(currentIndex, false);
+            }
+            isStepping = false;
+        }
+
+        function step(direction) {
+            if (isStepping) return;
+            isStepping = true;
+            currentIndex += direction;
+            scrollToIndex(currentIndex, true);
+            setTimeout(teleportIfNeeded, 400);
+        }
+
+        // Initial silent position
+        requestAnimationFrame(() => {
+            scrollToIndex(currentIndex, false);
+        });
+
+        // Mouse drag
+        let dragStartX = 0;
         let isDragging = false;
 
-        function updateCarousel() {
-            // Recalculate on each update to ensure correct dimensions
-            const cardWidth = cards[0].offsetWidth;
-            const gap = parseInt(getComputedStyle(grid).gap) || 16;
-            const offset = currentIndex * (cardWidth + gap);
-            
-            // Handle RTL direction
-            const isRTL = document.documentElement.dir === 'rtl';
-            const translateX = isRTL ? offset : -offset;
-            
-            grid.style.transform = `translateX(${translateX}px)`;
-            grid.style.transition = 'transform 0.3s ease-out';
-        }
-
-        function handleSwipe(deltaX) {
-            const threshold = 50;
-            if (Math.abs(deltaX) < threshold) {
-                updateCarousel();
-                return;
-            }
-
-            // In RTL, swiping right (negative deltaX) should move to next index
-            // and swiping left (positive deltaX) should move to previous index
-            const isRTL = document.documentElement.dir === 'rtl';
-            const normalizedDeltaX = isRTL ? -deltaX : deltaX;
-
-            if (normalizedDeltaX > 0) {
-                currentIndex = currentIndex >= maxIndex ? 0 : currentIndex + 1;
-            } else {
-                currentIndex = currentIndex <= 0 ? maxIndex : currentIndex - 1;
-            }
-            updateCarousel();
-        }
-
-        // Touch events
-        const touchStart = (e) => {
-            isDragging = true;
-            touchStartX = e.touches[0].screenX;
-            grid.style.transition = 'none';
-        };
-
-        const touchEnd = (e) => {
-            if (!isDragging) return;
-            isDragging = false;
-            const deltaX = touchStartX - e.changedTouches[0].screenX;
-            handleSwipe(deltaX);
-        };
-
-        grid.addEventListener('touchstart', touchStart);
-        grid.addEventListener('touchend', touchEnd);
-
-        // Mouse events
         const mouseDown = (e) => {
             isDragging = true;
-            touchStartX = e.clientX;
-            grid.style.cursor = 'grabbing';
+            dragStartX = e.clientX;
+            track.style.scrollBehavior = 'auto';
+            track.style.cursor = 'grabbing';
             e.preventDefault();
         };
 
         const mouseUpHandler = (e) => {
             if (!isDragging) return;
-
             isDragging = false;
-            const deltaX = touchStartX - e.clientX;
-            handleSwipe(deltaX);
-            grid.style.cursor = 'grab';
+            track.style.cursor = 'grab';
+            const delta = dragStartX - e.clientX;
+            const normalizedDelta = isRTL ? -delta : delta;
+            if (Math.abs(delta) > 50) step(normalizedDelta > 0 ? 1 : -1);
         };
 
-        grid.addEventListener('mousedown', mouseDown);
+        track.addEventListener('mousedown', mouseDown);
         document.addEventListener('mouseup', mouseUpHandler);
 
-        // Button controls
-        const isRTL = document.documentElement.dir === 'rtl';
+        // Touch: let native scroll-snap handle the animation.
+        // We only need to detect when the user lands on a clone and teleport silently.
+        let scrollEndTimer = null;
 
-        // In RTL: swap arrow icons and reorder buttons so ‹ is on the right, › on the left
+        const scrollHandler = () => {
+            // Debounce: fire ~100ms after scrolling stops
+            clearTimeout(scrollEndTimer);
+            scrollEndTimer = setTimeout(() => {
+                if (isStepping) return;
+
+                // Sync currentIndex to wherever the scroll landed
+                const scrollLeft = track.scrollLeft;
+                let closest = 0;
+                let minDist = Infinity;
+                allCards.forEach((card, i) => {
+                    const dist = Math.abs(card.offsetLeft - track.offsetLeft - scrollLeft);
+                    if (dist < minDist) { minDist = dist; closest = i; }
+                });
+                currentIndex = closest;
+
+                // Teleport if landed on a clone
+                if (currentIndex < total) {
+                    currentIndex = currentIndex + total;
+                    scrollToIndex(currentIndex, false);
+                } else if (currentIndex >= total * 2) {
+                    currentIndex = currentIndex - total;
+                    scrollToIndex(currentIndex, false);
+                }
+            }, 100);
+        };
+
+        track.addEventListener('scroll', scrollHandler, { passive: true });
+
+        // Touch: native scroll-snap handles animation
+        const touchStart = (e) => {
+            touchStartX = e.touches[0].screenX;
+        };
+        let touchStartX = 0;
+
+        const touchEnd = (e) => {
+            // Native scroll-snap handles the animation; we do nothing here
+        };
+
+        track.addEventListener('touchstart', touchStart, { passive: true });
+        track.addEventListener('touchend', touchEnd, { passive: true });
+
+        // Button controls
         if (isRTL) {
             const prevIcon = prevBtn.querySelector('.material-symbols-rounded');
             const nextIcon = nextBtn.querySelector('.material-symbols-rounded');
             if (prevIcon) prevIcon.textContent = 'chevron_right';
             if (nextIcon) nextIcon.textContent = 'chevron_left';
-            // Move nextBtn before prevBtn in DOM so › appears on the left
-            if (prevBtn.parentNode) {
-                prevBtn.parentNode.insertBefore(nextBtn, prevBtn);
-            }
+            if (prevBtn.parentNode) prevBtn.parentNode.insertBefore(nextBtn, prevBtn);
         }
 
-        const nextClick = (e) => {
-            e.preventDefault();
-            // In RTL, the visual "next" button (chevron pointing left) has class .prev
-            // so we invert the index direction
-            if (isRTL) {
-                currentIndex = currentIndex <= 0 ? maxIndex : currentIndex - 1;
-            } else {
-                currentIndex = currentIndex >= maxIndex ? 0 : currentIndex + 1;
-            }
-            updateCarousel();
-        };
-
-        const prevClick = (e) => {
-            e.preventDefault();
-            if (isRTL) {
-                currentIndex = currentIndex >= maxIndex ? 0 : currentIndex + 1;
-            } else {
-                currentIndex = currentIndex <= 0 ? maxIndex : currentIndex - 1;
-            }
-            updateCarousel();
-        };
+        const nextClick = (e) => { e.preventDefault(); step(isRTL ? -1 : 1); };
+        const prevClick = (e) => { e.preventDefault(); step(isRTL ? 1 : -1); };
 
         nextBtn.addEventListener('click', nextClick);
         prevBtn.addEventListener('click', prevClick);
 
-        // Responsive resize
+        // Resize
         let resizeTimer;
         const resizeHandler = () => {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(() => {
-                const newIsMobile = window.innerWidth <= 768;
-                if (newIsMobile !== isMobile) {
-                    location.reload();
-                }
-                updateCarousel();
+                if ((window.innerWidth <= 768) !== isMobile) { location.reload(); return; }
+                scrollToIndex(currentIndex, false);
             }, 250);
         };
-
         window.addEventListener('resize', resizeHandler);
 
-        // Store instance for cleanup
         carouselInstance = {
-            grid,
+            track,
             prevBtn,
             nextBtn,
-            touchStart,
-            touchEnd,
+            scrollHandler,
+            resizeHandler,
             mouseDown,
             mouseUpHandler,
+            touchStart,
+            touchEnd,
             nextClick,
             prevClick,
-            resizeHandler
         };
-
-        // Initial update - use requestAnimationFrame to ensure DOM is ready
-        requestAnimationFrame(() => {
-            updateCarousel();
-        });
     }
 
     // Reload testimonials on language change
     window.reloadTestimonials = function() {
         const testimonials = loadTestimonials();
         renderTestimonials(testimonials);
-
-        // Wait for DOM to update, then reinitialize carousel
-        setTimeout(() => {
-            initializeCarousel();
-        }, 100);
+        setTimeout(() => { initializeCarousel(); }, 100);
     };
 
     // Initialize testimonials with event-based approach
@@ -294,26 +324,17 @@
             console.log('i18n ready event received:', event.detail);
             const testimonials = loadTestimonials();
             renderTestimonials(testimonials);
-
-            // Initialize carousel after render
-            setTimeout(() => {
-                initializeCarousel();
-            }, 100);
+            setTimeout(() => { initializeCarousel(); }, 100);
         });
 
-        // Also check if i18n is already ready
         if (window.i18n && window.i18n.translations && window.i18n.translations.testimonials) {
             console.log('i18n already ready, loading immediately');
             const testimonials = loadTestimonials();
             renderTestimonials(testimonials);
-
-            setTimeout(() => {
-                initializeCarousel();
-            }, 100);
+            setTimeout(() => { initializeCarousel(); }, 100);
         }
     }
 
-    // Start when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
