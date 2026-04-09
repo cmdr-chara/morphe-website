@@ -141,7 +141,9 @@
     "q7": "Is Morphe magie?",
     "a7": "Nee. Maar ook ja.",
     "q8": "Kan ik bijdragen aan Morphe?",
-    "a8": "Ja! Bekijk onze %1. We waarderen ook %2."
+    "a8": "Ja! Bekijk onze %1. We waarderen ook %2.",
+    "a8-link1": "GitHub-repositories",
+    "a8-link2": "donaties"
   },
   "footer": {
     "description": "Android-app patching van de volgende generatie",

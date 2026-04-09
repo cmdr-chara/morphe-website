@@ -141,7 +141,9 @@
     "q7": "Ist Morphe Magie?",
     "a7": "Nein. Aber irgendwie doch. Es ist fortgeschrittene Bytecode-Manipulation, die sich wie Magie anfühlt.",
     "q8": "Kann ich zu Morphe beitragen?",
-    "a8": "Ja! Sieh dir die Beitragsrichtlinien in unseren %1 an. Wenn du kein Entwickler bist, freuen wir uns immer über %2, um die laufenden Kosten zu decken."
+    "a8": "Ja! Sieh dir die Beitragsrichtlinien in unseren %1 an. Wenn du kein Entwickler bist, freuen wir uns immer über %2, um die laufenden Kosten zu decken.",
+    "a8-link1": "GitHub-Repositories",
+    "a8-link2": "Spenden"
   },
   "footer": {
     "description": "Android-App-Patching der nächsten Generation",

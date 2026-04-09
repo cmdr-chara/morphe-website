@@ -247,7 +247,9 @@
     "q7": "Morphe có phải ảo quá không?",
     "a7": "Không. Cảm giác thì giống vậy. Nhưng thực chất là thao tác bytecode cũng rất nâng cao.",
     "q8": "Tôi có thể đóng góp cho Morphe không?",
-    "a8": "Có! Xem hướng dẫn đóng góp tại %1. Nếu bạn không phải dev, bạn vẫn có thể %2 để giúp duy trì dự án."
+    "a8": "Có! Xem hướng dẫn đóng góp tại %1. Nếu bạn không phải dev, bạn vẫn có thể %2 để giúp duy trì dự án.",
+    "a8-link1": "GitHub",
+    "a8-link2": "ủng hộ"
   },
   "community": {
     "subtitle": "Hãy theo dõi chúng tôi và cùng nhau cải thiện Morphe mỗi ngày",

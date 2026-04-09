@@ -141,7 +141,9 @@
     "q7": "¿Morphe es magia?",
     "a7": "No. Pero también sí. Es manipulación avanzada de bytecode que se siente como magia.",
     "q8": "¿Puedo contribuir a Morphe?",
-    "a8": "¡Sí! Consulta las guías de contribución en nuestros %1. Si no tienes habilidades de desarrollo, siempre agradecemos %2 para ayudar a cubrir los gastos."
+    "a8": "¡Sí! Consulta las guías de contribución en nuestros %1. Si no tienes habilidades de desarrollo, siempre agradecemos %2 para ayudar a cubrir los gastos.",
+    "a8-link1": "repositorios de GitHub",
+    "a8-link2": "donaciones"
   },
   "footer": {
     "description": "Parchado de aplicaciones Android de próxima generación",

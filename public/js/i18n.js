@@ -245,6 +245,7 @@
 
             // Translate elements with data-i18n-links: replaces %1, %2, ... with multiple links
             // data-i18n-links is a JSON array: [{ href, text, attrs }, ...]
+            // Link text can be overridden per-locale via translation keys: {key}-link1, {key}-link2, ...
             document.querySelectorAll('[data-i18n-links]').forEach(element => {
                 const key = element.getAttribute('data-i18n-links');
                 let translation = this.translate(key);
@@ -253,13 +254,19 @@
                     const links = JSON.parse(element.getAttribute('data-i18n-links-data') || '[]');
                     links.forEach((link, index) => {
                         const placeholder = `%${index + 1}`;
+                        // Check for translated link text via {key}-link1, {key}-link2, ...
+                        const textKey = `${key}-link${index + 1}`;
+                        const translatedText = this.translate(textKey);
+                        const linkText = (translatedText && translatedText !== textKey)
+                            ? translatedText
+                            : link.text;
                         let extraAttrs = '';
                         if (link.attrs) {
                             extraAttrs = Object.entries(link.attrs)
                                 .map(([k, v]) => `${k}="${String(v).replace(/"/g, '&quot;')}"`)
                                 .join(' ');
                         }
-                        const linkHtml = `<a href="${link.href}" ${extraAttrs}>${link.text}</a>`;
+                        const linkHtml = `<a href="${link.href}" ${extraAttrs}>${linkText}</a>`;
                         translation = translation.replace(placeholder, linkHtml);
                     });
                 } catch (e) {

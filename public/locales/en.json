@@ -247,7 +247,9 @@
     "q7": "Is Morphe magic?",
     "a7": "No. But also yes. It's advanced bytecode manipulation that feels like magic.",
     "q8": "Can I contribute to Morphe?",
-    "a8": "Yes! See the contribution guidelines in our %1. If you don't have developer skills, we always appreciate %2 to help pay the bills."
+    "a8": "Yes! See the contribution guidelines in our %1. If you don't have developer skills, we always appreciate %2 to help pay the bills.",
+    "a8-link1": "GitHub repos",
+    "a8-link2": "donations"
   },
   "community": {
     "subtitle": "Follow us, report issues, and help make Morphe better",

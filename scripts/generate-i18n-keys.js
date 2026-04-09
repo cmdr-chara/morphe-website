@@ -128,12 +128,26 @@ function extractKeys() {
     }
 
     // Extract data-i18n-links attributes (multiple inline links with %1, %2, ... placeholders)
-    // Same null sentinel approach — value lives in en.json manually.
+    // The main key and per-link text keys ({key}-link1, {key}-link2, ...) all live in en.json manually.
     const i18nLinksMatches = content.matchAll(/data-i18n-links="([^"]+)"/g);
     for (const match of i18nLinksMatches) {
       const key = match[1];
       if (!keys.has(key)) {
         keys.set(key, null);
+      }
+      // Parse data-i18n-links-data to register link text keys as null sentinels
+      const dataAttrRegex = new RegExp(`data-i18n-links="${key}"[^>]*data-i18n-links-data='([^']+)'`);
+      const dataMatch = dataAttrRegex.exec(content);
+      if (dataMatch) {
+        try {
+          const links = JSON.parse(dataMatch[1]);
+          links.forEach((_, index) => {
+            const linkKey = `${key}-link${index + 1}`;
+            if (!keys.has(linkKey)) {
+              keys.set(linkKey, null);
+            }
+          });
+        } catch (e) { /* ignore parse errors */ }
       }
     }
   });

@@ -141,7 +141,9 @@
     "q7": "Morphe sihir mi?",
     "a7": "Hayır. Ama biraz evet.",
     "q8": "Morphe'ye katkıda bulunabilir miyim?",
-    "a8": "Evet! Katkıda bulunma yönergelerini %1 içinde inceleyin. Geliştirici becerileriniz yoksa, faturaları ödemeye yardımcı olmak için %2 desteğinizi her zaman takdir ederiz."
+    "a8": "Evet! %1 bak. %2 da memnuniyetle karşılanır.",
+    "a8-link1": "GitHub depolarımıza",
+    "a8-link2": "Bağışlar"
   },
   "footer": {
     "description": "Yeni nesil Android uygulama yamalama",

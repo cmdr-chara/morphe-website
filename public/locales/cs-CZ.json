@@ -141,7 +141,9 @@
     "q7": "Je Morphe magie?",
     "a7": "Ne. Ale trochu ano.",
     "q8": "Mohu přispět Morphe?",
-    "a8": "Ano! Podívej se na naše %1. Vítáme také %2."
+    "a8": "Ano! Podívej se na naše %1. Vítáme také %2.",
+    "a8-link1": "GitHub repozitáře",
+    "a8-link2": "dary"
   },
   "footer": {
     "description": "Patchování Android aplikací nové generace",

@@ -141,7 +141,9 @@
     "q7": "O Morphe é magia?",
     "a7": "Não. Mas também sim.",
     "q8": "Posso contribuir para o Morphe?",
-    "a8": "Sim! Consulta os nossos %1. Também apreciamos %2."
+    "a8": "Sim! Consulta os nossos %1. Também apreciamos %2.",
+    "a8-link1": "repositórios GitHub",
+    "a8-link2": "donativos"
   },
   "footer": {
     "description": "Patching de aplicações Android de nova geração",

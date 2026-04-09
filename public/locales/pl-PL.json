@@ -247,7 +247,9 @@
     "q7": "Czy Morphe to magia?",
     "a7": "I tak i nie. To po prostu zaawansowana manipulacja kodem, która daje magiczne efekty.",
     "q8": "Czy mogę pomóc w rozwoju Morphe?",
-    "a8": "Pewnie! Sprawdź wytyczne dla twórców w naszych %1. Jeśli nie programujesz, zawsze doceniamy %2, które pomagają nam opłacić rachunki."
+    "a8": "Pewnie! Sprawdź wytyczne dla twórców w naszych %1. Jeśli nie programujesz, zawsze doceniamy %2, które pomagają nam opłacić rachunki.",
+    "a8-link1": "repozytoriach na GitHubie",
+    "a8-link2": "darowizny"
   },
   "community": {
     "subtitle": "Obserwuj nas, zgłaszaj błędy i pomóż ulepszać Morphe",
