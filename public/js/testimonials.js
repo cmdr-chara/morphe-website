@@ -136,7 +136,12 @@
             const cardWidth = cards[0].offsetWidth;
             const gap = parseInt(getComputedStyle(grid).gap) || 16;
             const offset = currentIndex * (cardWidth + gap);
-            grid.style.transform = `translateX(-${offset}px)`;
+            
+            // Handle RTL direction
+            const isRTL = document.documentElement.dir === 'rtl';
+            const translateX = isRTL ? offset : -offset;
+            
+            grid.style.transform = `translateX(${translateX}px)`;
             grid.style.transition = 'transform 0.3s ease-out';
         }
 
@@ -147,7 +152,12 @@
                 return;
             }
 
-            if (deltaX > 0) {
+            // In RTL, swiping right (negative deltaX) should move to next index
+            // and swiping left (positive deltaX) should move to previous index
+            const isRTL = document.documentElement.dir === 'rtl';
+            const normalizedDeltaX = isRTL ? -deltaX : deltaX;
+
+            if (normalizedDeltaX > 0) {
                 currentIndex = currentIndex >= maxIndex ? 0 : currentIndex + 1;
             } else {
                 currentIndex = currentIndex <= 0 ? maxIndex : currentIndex - 1;
@@ -193,15 +203,39 @@
         document.addEventListener('mouseup', mouseUpHandler);
 
         // Button controls
+        const isRTL = document.documentElement.dir === 'rtl';
+
+        // In RTL: swap arrow icons and reorder buttons so ‹ is on the right, › on the left
+        if (isRTL) {
+            const prevIcon = prevBtn.querySelector('.material-symbols-rounded');
+            const nextIcon = nextBtn.querySelector('.material-symbols-rounded');
+            if (prevIcon) prevIcon.textContent = 'chevron_right';
+            if (nextIcon) nextIcon.textContent = 'chevron_left';
+            // Move nextBtn before prevBtn in DOM so › appears on the left
+            if (prevBtn.parentNode) {
+                prevBtn.parentNode.insertBefore(nextBtn, prevBtn);
+            }
+        }
+
         const nextClick = (e) => {
             e.preventDefault();
-            currentIndex = currentIndex >= maxIndex ? 0 : currentIndex + 1;
+            // In RTL, the visual "next" button (chevron pointing left) has class .prev
+            // so we invert the index direction
+            if (isRTL) {
+                currentIndex = currentIndex <= 0 ? maxIndex : currentIndex - 1;
+            } else {
+                currentIndex = currentIndex >= maxIndex ? 0 : currentIndex + 1;
+            }
             updateCarousel();
         };
 
         const prevClick = (e) => {
             e.preventDefault();
-            currentIndex = currentIndex <= 0 ? maxIndex : currentIndex - 1;
+            if (isRTL) {
+                currentIndex = currentIndex >= maxIndex ? 0 : currentIndex + 1;
+            } else {
+                currentIndex = currentIndex <= 0 ? maxIndex : currentIndex - 1;
+            }
             updateCarousel();
         };
 
