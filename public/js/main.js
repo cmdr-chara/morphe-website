@@ -8,17 +8,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const menuIcon = mobileMenuToggle.querySelector('.material-symbols-rounded');
 
+    function swapIcon(toIcon) {
+        if (!menuIcon) return;
+        menuIcon.classList.add('swap-out');
+        setTimeout(() => {
+            menuIcon.textContent = toIcon;
+            menuIcon.classList.remove('swap-out');
+            menuIcon.classList.add('swap-in');
+            setTimeout(() => menuIcon.classList.remove('swap-in'), 180);
+        }, 180);
+    }
+
     function openDrawer() {
         drawer.classList.add('open');
-        if (menuIcon) menuIcon.textContent = 'close';
+        mobileMenuToggle.classList.add('is-open');
+        swapIcon('close');
         document.body.style.overflow = 'hidden';
     }
 
     function closeDrawer() {
         drawer.classList.add('closing');
+        mobileMenuToggle.classList.remove('is-open');
+        swapIcon('menu');
         setTimeout(() => {
             drawer.classList.remove('open', 'closing');
-            if (menuIcon) menuIcon.textContent = 'menu';
             document.body.style.overflow = '';
         }, 270);
     }

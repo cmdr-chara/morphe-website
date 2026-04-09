@@ -362,7 +362,7 @@ body {
     width: 40px;
     height: 40px;
     border-radius: var(--radius-lg);
-    background: var(--gray-100);
+    background: rgba(0, 0, 0, 0.06);
     color: var(--text-primary);
     border: none;
     cursor: pointer;
@@ -374,7 +374,7 @@ body {
     .theme-toggle:hover,
     .lang-trigger-compact:hover,
     .mobile-menu-toggle:hover {
-        background: var(--gray-200);
+        background: rgba(0, 0, 0, 0.1);
         transform: scale(1.05);
     }
 }
@@ -410,17 +410,36 @@ body {
     display: none;
 }
 
-/* hamburger icon toggle - handled via JS (menu ↔ close) */
+/* Hamburger icon toggle */
 .mobile-menu-toggle
 .material-symbols-rounded {
     font-size: 20px;
     color: var(--text-primary);
-    transition: transform var(--transition-base);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 0.15s ease;
 }
 
-.mobile-menu-toggle.active
+.mobile-menu-toggle.is-open
 .material-symbols-rounded {
     transform: rotate(90deg);
+}
+
+@keyframes iconSwapOut {
+    from { opacity: 1; transform: rotate(0deg) scale(1); }
+    to   { opacity: 0; transform: rotate(-90deg) scale(0.6); }
+}
+
+@keyframes iconSwapIn {
+    from { opacity: 0; transform: rotate(90deg) scale(0.6); }
+    to   { opacity: 1; transform: rotate(0deg) scale(1); }
+}
+
+.mobile-menu-toggle .material-symbols-rounded.swap-out {
+    animation: iconSwapOut 0.18s ease forwards;
+}
+
+.mobile-menu-toggle .material-symbols-rounded.swap-in {
+    animation: iconSwapIn 0.18s ease forwards;
 }
 
 /* Buttons */
@@ -2358,7 +2377,6 @@ body {
     }
 }
 
-
 /* Mobile Drawer */
 .mobile-drawer {
     display: none;
@@ -2380,29 +2398,59 @@ body {
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.4);
-    animation: drawerFadeIn 0.25s ease;
+    animation: drawerFadeIn 0.22s ease forwards;
 }
 
 .drawer-sheet {
     position: absolute;
-    top: var(--navbar-height);
+    top: 0;
     left: 0;
     right: 0;
-    background: var(--bg-page);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
     border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
-    padding: 0 0 var(--spacing-lg);
+    padding: var(--navbar-height) 0 var(--spacing-lg);
     display: flex;
     flex-direction: column;
     gap: 2px;
     box-shadow: var(--shadow-xl);
-    animation: drawerSlideIn 0.3s cubic-bezier(0.05, 0.7, 0.1, 1);
+    animation: drawerDropIn 0.28s cubic-bezier(0.05, 0.7, 0.1, 1) forwards;
+}
+
+@keyframes drawerFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes drawerFadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+@keyframes drawerDropIn {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes drawerDropOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-12px); }
+}
+
+.mobile-drawer.closing .drawer-scrim {
+    animation: drawerFadeOut 0.22s ease forwards;
+}
+
+.mobile-drawer.closing .drawer-sheet {
+    animation: drawerDropOut 0.22s ease forwards;
 }
 
 .drawer-link {
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 13px var(--spacing-lg);
+    padding: 13px var(--spacing-md);
+    margin: 0 var(--spacing-sm);
     border-radius: var(--radius-lg);
     font-size: 0.9375rem;
     font-weight: 500;
@@ -2442,34 +2490,6 @@ body {
     background: var(--border);
     border: none;
     margin: var(--spacing-xs) var(--spacing-md);
-}
-
-@keyframes drawerFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes drawerFadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-
-@keyframes drawerSlideIn {
-    from { transform: translateY(-100%); }
-    to { transform: translateY(0); }
-}
-
-@keyframes drawerSlideOut {
-    from { transform: translateY(0); }
-    to { transform: translateY(-100%); }
-}
-
-.mobile-drawer.closing .drawer-scrim {
-    animation: drawerFadeOut 0.25s ease forwards;
-}
-
-.mobile-drawer.closing .drawer-sheet {
-    animation: drawerSlideOut 0.25s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 
 /* Mobile adjustments */
