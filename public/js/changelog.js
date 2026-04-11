@@ -129,10 +129,10 @@
                 if (typeMatch && devMatch) {
                     this.matchingCards.push(card);
                     card.classList.add('lazy-hidden'); // hide but keep in DOM for observer
-                    card.classList.remove('hidden');
+                    card.classList.remove('hidden', 'card-reveal');
                 } else {
                     card.classList.add('hidden');
-                    card.classList.remove('lazy-hidden');
+                    card.classList.remove('lazy-hidden', 'card-reveal');
                 }
             });
 
@@ -158,7 +158,11 @@
         revealNextBatch() {
             const end = Math.min(this.visibleCount + PAGE_SIZE, this.matchingCards.length);
             for (let i = this.visibleCount; i < end; i++) {
-                this.matchingCards[i].classList.remove('lazy-hidden');
+                const card = this.matchingCards[i];
+                card.classList.remove('lazy-hidden');
+                // Stagger the fade-in animation within each batch
+                card.style.setProperty('--card-delay', `${(i - this.visibleCount) * 40}ms`);
+                card.classList.add('card-reveal');
             }
             this.visibleCount = end;
 

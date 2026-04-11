@@ -143,8 +143,55 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Intersection Observer for animations
+// Scroll-reveal animations
 document.addEventListener('DOMContentLoaded', function() {
+    // Mark elements that should animate on scroll.
+    // Classes are added here (not in HTML) so content is always visible without JS.
+
+    // Simple fade-up elements
+    const revealSelectors = [
+        '.section-header',
+        '.hero-content',
+        '.hero-image',
+        '.faq-item',
+        '.show-more-section',
+        '.changelog-hero',
+        '.changelog-filters',
+        '.donate-card',
+        '.donate-tiers-header',
+        '.donate-backers',
+        '.donate-sponsors-card',
+        '.community-card',
+        '.microg-feature',
+        '.translate-step',
+        '.translate-why-item',
+        // App Features — animate the tab bar and the panel wrapper as single units
+        // (internals are managed by app-features.js carousel, don't touch them)
+        '.app-tabs',
+        '.app-features-panel-wrapper',
+        // Testimonials — animate the whole carousel block as one unit
+        // (internals are managed by testimonials.js, don't touch them)
+        '.testimonials-carousel',
+    ];
+
+    document.querySelectorAll(revealSelectors.join(', ')).forEach(el => {
+        el.classList.add('will-reveal');
+    });
+
+    // Staggered containers — children animate in sequence
+    const staggerSelectors = [
+        '.features-grid',
+        '.donate-tiers',
+    ];
+
+    document.querySelectorAll(staggerSelectors.join(', ')).forEach(container => {
+        container.classList.add('will-reveal-stagger');
+        Array.from(container.children).forEach((child, i) => {
+            child.style.setProperty('--reveal-delay', `${i * 80}ms`);
+        });
+    });
+
+    // Single observer for everything
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -153,12 +200,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
+        threshold: 0.08,
+        rootMargin: '0px 0px -60px 0px'
     });
 
-    const elements = document.querySelectorAll('.feature-card, .faq-item, .crypto-card, .testimonial-card');
-    elements.forEach(el => observer.observe(el));
+    document.querySelectorAll('.will-reveal, .will-reveal-stagger').forEach(el => {
+        observer.observe(el);
+    });
 });
 
 // Scroll to Top Button
