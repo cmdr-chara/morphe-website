@@ -200,8 +200,8 @@ function parseLinks(text, repoUrl) {
 function generateVersionCard(version, repoUrl) {
     const releaseUrl = `${repoUrl}/releases/tag/v${version.version}`;
     const typeBadge = version.type === 'manager'
-        ? '<span class="type-badge manager">Manager</span>'
-        : '<span class="type-badge patches">Patches</span>';
+        ? '<span class="type-badge manager" data-i18n="changelog.filter-manager">Manager</span>'
+        : '<span class="type-badge patches" data-i18n="changelog.filter-patches">Patches</span>';
 
     let html = `
 <div class="version-card" data-type="${version.type}" data-dev="${version.isDev}">
@@ -214,7 +214,7 @@ function generateVersionCard(version, repoUrl) {
         </div>
         <div class="version-date">
             <span class="material-symbols-rounded">calendar_today</span>
-            ${escapeHtml(version.date)}
+            <time class="version-date-text" data-date="${escapeHtml(version.date)}">${escapeHtml(version.date)}</time>
         </div>
     </div>
     <div class="changes-section">`;

@@ -4,6 +4,40 @@
     const STORAGE_KEY_FILTER = 'changelog-filter';
     const STORAGE_KEY_SHOW_DEV = 'changelog-show-dev';
 
+    /**
+     * Format an ISO date string (YYYY-MM-DD) according to the given BCP 47 locale.
+     * Falls back to the raw string if Intl is unavailable or the date is invalid.
+     */
+    function formatDate(isoDate, locale) {
+        try {
+            // Parse as UTC noon to avoid off-by-one from timezone shifts
+            const date = new Date(isoDate + 'T12:00:00Z');
+            if (isNaN(date.getTime())) return isoDate;
+
+            return new Intl.DateTimeFormat(locale, {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }).format(date);
+        } catch (_) {
+            return isoDate;
+        }
+    }
+
+    /**
+     * Re-format all <time data-date="…"> elements using the current i18n locale.
+     */
+    function applyLocaleDates() {
+        const lang = (window.i18n && window.i18n.getCurrentLanguage())
+            || document.documentElement.lang
+            || navigator.language
+            || 'en';
+
+        document.querySelectorAll('time[data-date]').forEach(el => {
+            el.textContent = formatDate(el.getAttribute('data-date'), lang);
+        });
+    }
+
     class ChangelogPage {
         constructor() {
             this.currentFilter = localStorage.getItem(STORAGE_KEY_FILTER) || 'all';
@@ -15,6 +49,30 @@
             this.setupFilters();
             this.setupToggle();
             this.applyFilters();
+            this.setupI18nIntegration();
+        }
+
+        /**
+         * Hook into i18n events so dates and badges update when the language changes.
+         */
+        setupI18nIntegration() {
+            // i18n may already be ready (script order) or fire later
+            const onReady = () => applyLocaleDates();
+            const onChange = () => {
+                applyLocaleDates();
+                // Re-apply badge translations (i18n.applyTranslations handles data-i18n elements)
+                if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+                    window.i18n.applyTranslations();
+                }
+            };
+
+            window.addEventListener('i18nReady', onReady, { once: true });
+            window.addEventListener('i18nLanguageChanged', onChange);
+
+            // If i18n already fired before this script ran, format immediately
+            if (window.i18n && window.i18n.getCurrentLanguage()) {
+                applyLocaleDates();
+            }
         }
 
         setupFilters() {
