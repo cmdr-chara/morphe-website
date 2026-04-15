@@ -10,9 +10,9 @@
         'hero.title-highlight',
     ];
 
-    const HOLD_MS            = 2600;
+    const HOLD_MS            = 1800;
     const CROSSFADE_MS       = 600; // must match CSS transition duration
-    const PAUSE_BEFORE_FIRST = 1800;
+    const PAUSE_BEFORE_FIRST = 2200;
 
     let currentIndex = 0;
     let timer        = null;
